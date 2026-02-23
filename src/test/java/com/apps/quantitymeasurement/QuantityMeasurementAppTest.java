@@ -73,7 +73,11 @@ public class QuantityMeasurementAppTest {
     @Test
     public void centimeterEquals39Point3701Inches() {
     	Length centimeter = new Length(1.0, LengthUnit.CENTIMETERS);
+<<<<<<< Updated upstream
     	Length inches = new Length(39.3701, LengthUnit.INCHES);
+=======
+    	Length inches = new Length(0.393700787, LengthUnit.INCHES);
+>>>>>>> Stashed changes
     	
     	assertTrue(centimeter.equals(inches));
     }
@@ -148,5 +152,21 @@ public class QuantityMeasurementAppTest {
     	Length yards = new Length(1.0, LengthUnit.YARDS);
     	Length feets = new Length(3.0, LengthUnit.FEET); 
         assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(yards, feets));
+    }
+    
+    @Test 
+    public void convertFeetToInches() {
+    	Length lengthInInches = QuantityMeasurementApp.demonstrateLengthConversion(3.0, LengthUnit.FEET, LengthUnit.INCHES);
+    	Length expectedLength = new Length(36.0, LengthUnit.INCHES);
+    	assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(lengthInInches, expectedLength));
+    }
+    
+    @Test
+    public void convertYardsToInchesUsingOverloadedMethod() {
+    	Length lengthInYards = new Length(2.0, LengthUnit.YARDS);
+    	Length lengthInInches = QuantityMeasurementApp.demonstrateLengthConversion(lengthInYards, LengthUnit.INCHES);
+    	Length expectedLength = new Length(72.0, LengthUnit.INCHES);
+    	
+    	assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(lengthInInches, expectedLength));
     }
 }
