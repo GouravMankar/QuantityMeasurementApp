@@ -73,7 +73,7 @@ public class QuantityMeasurementAppTest {
     @Test
     public void centimeterEquals39Point3701Inches() {
     	Length centimeter = new Length(1.0, LengthUnit.CENTIMETERS);
-    	Length inches = new Length(39.3701, LengthUnit.INCHES);
+    	Length inches = new Length(0.393701, LengthUnit.INCHES);
     	
     	assertTrue(centimeter.equals(inches));
     }

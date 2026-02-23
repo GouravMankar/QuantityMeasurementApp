@@ -9,7 +9,7 @@ public class Length {
 		FEET(12.0),
 		INCHES(1.0),
 		YARDS(36.0),
-		CENTIMETERS(0.393701);
+		CENTIMETERS(0.393700787);
 		
 		private final double conversionFactor;
 		
@@ -35,10 +35,10 @@ public class Length {
 	
 	// compare two length object
 	public boolean compare(Length thatLength) {
-		double currentBaseLength = this.convertToBaseUnit();
-		double thatBaseLength = thatLength.convertToBaseUnit();
-		
-		return Double.compare(currentBaseLength, thatBaseLength) == 0;
+	    double currentBaseLength = this.convertToBaseUnit();
+	    double thatBaseLength = thatLength.convertToBaseUnit();
+
+	    return Math.abs(currentBaseLength - thatBaseLength) < 0.0001;
 	}
 	
     @Override
