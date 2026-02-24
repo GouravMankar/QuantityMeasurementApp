@@ -31,7 +31,9 @@ public class QuantityMeasurementApp {
    public static Length demonstrateLengthAddition(Length length1, Length length2) {
 	   return length1.add(length2);
    }
-    
+   public static Length demonstrateLengthAddition(Length length1,Length length2,LengthUnit targetUnit) {
+	   return length1.add(length2, targetUnit);
+   }
     public static void main(String[] args) {
     	// Demonstrate feet and inch equality
     	System.out.println(demonstrateLengthComparison(1.0, LengthUnit.FEET, 12.0, LengthUnit.INCHES));
@@ -69,6 +71,8 @@ public class QuantityMeasurementApp {
     	System.out.println();
     	
     	System.out.println(demonstrateLengthAddition(new Length(12.0, LengthUnit.INCHES), new Length(1.0, LengthUnit.FEET)));
+    	System.out.println();
+    	System.out.println(demonstrateLengthAddition(new Length(12.0, LengthUnit.INCHES), new Length(1.0, LengthUnit.FEET),LengthUnit.FEET));
     	System.out.println();
 	}
 }
