@@ -4,20 +4,7 @@ public class Length {
 	private double value;
 	private LengthUnit unit;
 
-	// Enum to convert unit and storing the conversion factor, base unit Inch
-	public enum LengthUnit {
-		FEET(12.0), INCHES(1.0), YARDS(36.0), CENTIMETERS(0.393700787);
 
-		private final double conversionFactor;
-
-		LengthUnit(double conversionFactor) {
-			this.conversionFactor = conversionFactor;
-		}
-
-		public double getConversionFactor() {
-			return this.conversionFactor;
-		}
-	}
 
 	// constructor to initialize length and unit
 	public Length(double value, LengthUnit unit) {
@@ -25,10 +12,11 @@ public class Length {
 		this.unit = unit;
 	}
 
-	// convert the length value to base unit (inches)
-	private double convertToBaseUnit() {
-		return unit.getConversionFactor() * value;
-	}
+
+	// Convert this length to base unit (Inches)
+    private double convertToBaseUnit() {
+        return unit.convertToBaseUnit(value);
+    }
 
 	// compare two length object
 	public boolean compare(Length thatLength) {
