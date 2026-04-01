@@ -530,3 +530,52 @@ This ensures the application returns consistent, user-friendly error responses a
 - Fail-Fast Principle  
 - Robustness  
 - Standardized Communication Contracts  
+
+
+# UC18 – Secure API with Spring Security, JWT, and OAuth2  
+
+**Date:** 2026-04-01  
+
+## Overview  
+Transformed the application into a production-ready system by implementing a robust security layer.  
+
+The RESTful APIs are now secured using **Spring Security**, ensuring that only authenticated and authorized users can perform operations like measurement, conversion, and accessing history.
+
+## What Was Added  
+
+- **Spring Security Integration:**  
+  Configured a security filter chain to intercept and authorize all incoming HTTP requests.  
+
+- **JSON Web Token (JWT):**  
+  Implemented stateless authentication using signed JWTs, eliminating the need for server-side sessions.  
+
+- **OAuth2 Authentication:**  
+  Enabled third-party login support (e.g., Google, GitHub) for secure authentication using external providers.  
+
+- **Role-Based Access Control (RBAC):**  
+  Defined roles such as USER and ADMIN to restrict access to sensitive operations.  
+
+- **Password Encoding:**  
+  Used BCrypt hashing to securely store user passwords and protect against attacks.  
+
+## What I Learned  
+
+- **Stateless Security:**  
+  Learned how token-based authentication improves scalability in REST APIs.  
+
+- **OAuth2 Flow:**  
+  Understood Authorization Code and Implicit flows for secure authentication via external providers.  
+
+- **Security Filter Chain:**  
+  Gained knowledge of how filters process requests, extract tokens, and set authentication context.  
+
+- **Cryptographic Signing:**  
+  Learned how JWT signatures ensure data integrity and prevent tampering.  
+
+## Principles Followed  
+
+- Principle of Least Privilege  
+- Defense in Depth  
+- Statelessness  
+- Secure Credential Management  
+- Standardized Identity Protocols (OAuth2 / OpenID Connect)  
