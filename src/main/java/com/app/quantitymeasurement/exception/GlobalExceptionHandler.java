@@ -26,10 +26,10 @@ class ErrorResponse{
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private final QuantityMeasurementAppApplication application;
+    private final QuantityMeasurementAppApplication quantityMeasurementAppApplication;
 
-    GlobalExceptionHandler(QuantityMeasurementAppApplication application) {
-        this.application = application;
+    GlobalExceptionHandler(QuantityMeasurementAppApplication quantityMeasurementAppApplication) {
+        this.quantityMeasurementAppApplication = quantityMeasurementAppApplication;
     }
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,
@@ -51,6 +51,22 @@ public class GlobalExceptionHandler {
 		 
 		 return ResponseEntity.badRequest().body(errorResponse);
 	}
+
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex,
+																	 WebRequest request) {
+		log.info(ex.getMessage());
+
+		ErrorResponse errorResponse = new ErrorResponse();
+
+		errorResponse.timeStamp = LocalDateTime.now();
+		errorResponse.status = HttpStatus.BAD_REQUEST.value();
+		errorResponse.error = "Quantity measurement error";
+		errorResponse.message = ex.getMessage();
+		errorResponse.path = request.getDescription(false).replace("uri=", "");
+
+		return ResponseEntity.badRequest().body(errorResponse);
+	}
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> handleException(Exception ex, WebRequest request) {
@@ -59,7 +75,7 @@ public class GlobalExceptionHandler {
 		
 		errorResponse.timeStamp = LocalDateTime.now();
 		errorResponse.status = HttpStatus.BAD_REQUEST.value();
-		errorResponse.error = "Quantity mesurement error";
+		errorResponse.error = "Quantity measurement error";
 		errorResponse.message = ex.getMessage();
 		errorResponse.path = request.getDescription(false).replace("uri=", "");
 		

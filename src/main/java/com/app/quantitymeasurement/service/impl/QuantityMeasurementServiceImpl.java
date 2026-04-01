@@ -1,4 +1,4 @@
-package com.app.quantitymeasurement.service;
+package com.app.quantitymeasurement.service.impl;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import com.app.quantitymeasurement.entity.QuantityMeasurementEntity;
 import com.app.quantitymeasurement.enums.OperationType;
 import com.app.quantitymeasurement.exception.QuantityMeasurementException;
 import com.app.quantitymeasurement.repository.QuantityMeasurementRepository;
+import com.app.quantitymeasurement.service.IQuantityMeasurementService;
 import com.app.quantitymeasurement.unit.IMeasurable;
 
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,6 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
     @Override
     public QuantityMeasurementDTO compare(QuantityDTO thisDTO, QuantityDTO thatDTO) {
         try {
-        	log.info("validating compare request");
             validateSameType(thisDTO, thatDTO);
 
             double base1 = toBase(thisDTO);
