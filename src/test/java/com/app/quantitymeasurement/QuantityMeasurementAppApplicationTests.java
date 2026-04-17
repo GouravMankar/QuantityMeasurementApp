@@ -24,20 +24,20 @@ import com.app.quantitymeasurement.dto.QuantityInputDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QuantityMeasurementAppApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper objectMapper;
-    
+    private final ObjectMapper objectMapper;
+
     public QuantityMeasurementAppApplicationTests() {
-    	this.objectMapper = new ObjectMapper(); 
+        this.objectMapper = new ObjectMapper();
     }
 
-    private String baseUrl = "/api/v1/quantities";
+    private final String baseUrl = "/api/v1/quantities";
 
     private QuantityInputDTO input(
             double thisValue, String thisUnit, String thisMeasurementType,
@@ -58,8 +58,10 @@ public class QuantityMeasurementAppApplicationTests {
             double thatValue, String thatUnit, String thatMeasurementType,
             double targetValue, String targetUnit, String targetMeasurementType
     ) {
-        QuantityInputDTO dto = input(thisValue, thisUnit, thisMeasurementType,
-                thatValue, thatUnit, thatMeasurementType);
+        QuantityInputDTO dto = input(
+                thisValue, thisUnit, thisMeasurementType,
+                thatValue, thatUnit, thatMeasurementType
+        );
         dto.setTargetQuantityDTO(
                 new QuantityDTO(targetValue, targetUnit, targetMeasurementType)
         );
@@ -78,7 +80,7 @@ public class QuantityMeasurementAppApplicationTests {
         mockMvc.perform(post(baseUrl + "/compare")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                input(1.0,"FEET","LengthUnit",12.0,"INCHES","LengthUnit"))))
+                                input(1.0, "FEET", "LengthUnit", 12.0, "INCHES", "LengthUnit"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultString").value("true"));
     }
@@ -89,8 +91,8 @@ public class QuantityMeasurementAppApplicationTests {
         mockMvc.perform(post(baseUrl + "/compare")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                input(1.0,"FEET","LengthUnit",1.0,"INCHES","LengthUnit"))))
-        		.andDo(print())
+                                input(1.0, "FEET", "LengthUnit", 1.0, "INCHES", "LengthUnit"))))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultString").value("false"));
     }
@@ -101,7 +103,7 @@ public class QuantityMeasurementAppApplicationTests {
         mockMvc.perform(post(baseUrl + "/compare")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                input(1.0,"GALLON","VolumeUnit",3.785,"LITRE","VolumeUnit"))))
+                                input(1.0, "GALLON", "VolumeUnit", 3.785, "LITRE", "VolumeUnit"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultString").value("true"));
     }
@@ -112,7 +114,7 @@ public class QuantityMeasurementAppApplicationTests {
         mockMvc.perform(post(baseUrl + "/compare")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                input(212.0,"FAHRENHEIT","TemperatureUnit",100.0,"CELSIUS","TemperatureUnit"))))
+                                input(212.0, "FAHRENHEIT", "TemperatureUnit", 100.0, "CELSIUS", "TemperatureUnit"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultString").value("true"));
     }
@@ -123,7 +125,7 @@ public class QuantityMeasurementAppApplicationTests {
         mockMvc.perform(post(baseUrl + "/convert")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                input(100.0,"CELSIUS","TemperatureUnit",0.0,"FAHRENHEIT","TemperatureUnit"))))
+                                input(100.0, "CELSIUS", "TemperatureUnit", 0.0, "FAHRENHEIT", "TemperatureUnit"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultValue").value(212.0));
     }
@@ -134,7 +136,7 @@ public class QuantityMeasurementAppApplicationTests {
         mockMvc.perform(post(baseUrl + "/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                input(1.0,"GALLON","VolumeUnit",3.785,"LITRE","VolumeUnit"))))
+                                input(1.0, "GALLON", "VolumeUnit", 3.785, "LITRE", "VolumeUnit"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultValue").value(2.0));
     }
@@ -145,8 +147,10 @@ public class QuantityMeasurementAppApplicationTests {
         mockMvc.perform(post(baseUrl + "/add-with-target-unit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                inputWithTarget(1.0,"FEET","LengthUnit",12.0,"INCHES","LengthUnit",
-                                        0.0,"INCHES","LengthUnit"))))
+                                inputWithTarget(
+                                        1.0, "FEET", "LengthUnit",
+                                        12.0, "INCHES", "LengthUnit",
+                                        0.0, "INCHES", "LengthUnit"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultValue").value(24.0));
     }
@@ -157,7 +161,7 @@ public class QuantityMeasurementAppApplicationTests {
         mockMvc.perform(post(baseUrl + "/subtract")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                input(2.0,"FEET","LengthUnit",12.0,"INCHES","LengthUnit"))))
+                                input(2.0, "FEET", "LengthUnit", 12.0, "INCHES", "LengthUnit"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultValue").value(1.0));
     }
@@ -168,8 +172,10 @@ public class QuantityMeasurementAppApplicationTests {
         mockMvc.perform(post(baseUrl + "/subtract-with-target-unit")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                inputWithTarget(2.0,"FEET","LengthUnit",12.0,"INCHES","LengthUnit",
-                                        0.0,"INCHES","LengthUnit"))))
+                                inputWithTarget(
+                                        2.0, "FEET", "LengthUnit",
+                                        12.0, "INCHES", "LengthUnit",
+                                        0.0, "INCHES", "LengthUnit"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultValue").value(12.0));
     }
@@ -180,7 +186,7 @@ public class QuantityMeasurementAppApplicationTests {
         mockMvc.perform(post(baseUrl + "/divide")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                input(1.0,"YARDS","LengthUnit",1.0,"FEET","LengthUnit"))))
+                                input(1.0, "YARDS", "LengthUnit", 1.0, "FEET", "LengthUnit"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.resultValue").value(3.0));
     }
@@ -206,14 +212,13 @@ public class QuantityMeasurementAppApplicationTests {
                 .andExpect(status().isOk());
     }
 
-
     @Test
     @Order(15)
     void testCompare_UnitValidationFails() throws Exception {
         mockMvc.perform(post(baseUrl + "/compare")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                input(1.0,"FOOT","LengthUnit",12.0,"INCHES","LengthUnit"))))
+                                input(1.0, "FOOT", "LengthUnit", 12.0, "INCHES", "LengthUnit"))))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(containsString("Unit must be valid")));
     }
@@ -224,7 +229,7 @@ public class QuantityMeasurementAppApplicationTests {
         mockMvc.perform(post(baseUrl + "/compare")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
-                                input(1.0,"FEET","InvalidType",12.0,"INCHES","LengthUnit"))))
+                                input(1.0, "FEET", "InvalidType", 12.0, "INCHES", "LengthUnit"))))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(containsString("Measurement type must be one of")));
     }

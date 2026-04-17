@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +30,8 @@ public class QuantityMeasurementController {
     @PostMapping("/compare")
     @Operation(summary = "Compare two quantities")
     public ResponseEntity<QuantityMeasurementDTO> performComparison(@Valid @RequestBody QuantityInputDTO input) {
-    	log.info("compare called");
+    	log.info("compare called");System.out.println("API HIT 👉 compare called");
+    	
         QuantityMeasurementDTO compareDto = service.compare(input.getThisQuantityDTO(), input.getThatQuantityDTO());
         log.info(compareDto.toString());
         return ResponseEntity.ok(compareDto);
@@ -36,6 +40,7 @@ public class QuantityMeasurementController {
     @PostMapping("/convert")
     @Operation(summary = "Convert quantity to target unit")
     public ResponseEntity<QuantityMeasurementDTO> performConversion(@Valid @RequestBody QuantityInputDTO input) {
+    	System.out.println("API HIT 👉 compare called");
         return ResponseEntity.ok(service.convert(input.getThisQuantityDTO(), input.getThatQuantityDTO()));
     }
 
@@ -94,4 +99,9 @@ public class QuantityMeasurementController {
     public ResponseEntity<List<QuantityMeasurementDTO>> getErroredOperations() {
         return ResponseEntity.ok(service.getErrorHistory());
     }
+    @GetMapping("/history")	
+    public ResponseEntity<List<QuantityMeasurementDTO>> getAllHistory() {
+        return ResponseEntity.ok(service.getAllHistory());
+    }
+    
 }

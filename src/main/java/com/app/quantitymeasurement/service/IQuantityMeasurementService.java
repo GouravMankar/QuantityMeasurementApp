@@ -31,4 +31,6 @@ public interface IQuantityMeasurementService {
 
     // Get all failed/error operations
     List<QuantityMeasurementDTO> getErrorHistory();
+    
+    List<QuantityMeasurementDTO>getAllHistory();
 }

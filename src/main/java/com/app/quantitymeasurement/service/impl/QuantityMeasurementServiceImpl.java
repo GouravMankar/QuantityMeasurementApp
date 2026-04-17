@@ -239,4 +239,9 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
         return saveAndReturn(a, b, op, null, 0, null, null, true, e.getMessage());
     }
+    @Override
+	public List<QuantityMeasurementDTO> getAllHistory() {
+		
+		return QuantityMeasurementDTO.fromList(repository.findAll());
+	}
 }

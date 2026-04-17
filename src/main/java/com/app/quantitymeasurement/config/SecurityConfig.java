@@ -29,57 +29,50 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+	private final UserDetailsService userDetailsService;
+	private final JWTFilter filter;
+	private final AuthenticationSuccessHandler authenticationSuccessHandler;
+	private final AuthenticationFailureHandler authenticationFailureHandler;
 
-    private final UserDetailsService userDetailsService;
-    private final JWTFilter filter;
-    private final AuthenticationSuccessHandler authenticationSuccessHandler;
-    private final AuthenticationFailureHandler authenticationFailureHandler;
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf(c -> c.disable()).cors(c -> c.configurationSource(corsConfigurationSource()))
+				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.httpBasic(Customizer.withDefaults())
+				.userDetailsService(userDetailsService)
+				.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class).oauth2Login(oauth -> {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(c -> c.disable()).cors(c -> c.configurationSource(corsConfigurationSource()))
-        	.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .httpBasic(Customizer.withDefaults())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .userDetailsService(userDetailsService)
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-                .oauth2Login(oauth -> {
-                    oauth.loginPage("/login/google");
-                    oauth.successHandler(authenticationSuccessHandler);
-                    oauth.failureHandler(authenticationFailureHandler);
-                })
-        	.authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/v1/auth/**", "/login/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                    .anyRequest().authenticated());
-  
-        return http.build();
-    }
+					oauth.successHandler(authenticationSuccessHandler);
+					oauth.failureHandler(authenticationFailureHandler);
+				}).authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/**", "/api/v1/quantity/**",
+						"/oauth2/**", "/login/oauth2/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll().anyRequest()
+						.authenticated());
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+		return http.build();
+	}
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-        corsConfiguration.setAllowedHeaders(List.of("*"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000",
-                "http://localhost:5500",
-                "http://127.0.0.1:3000",
-                "http://localhost:4200"));
-        corsConfiguration.setAllowCredentials(true);
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource
-                = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-        return urlBasedCorsConfigurationSource;
-    }
+		corsConfiguration.setAllowedHeaders(List.of("*"));
+		corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
+		corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5500",
+				"http://127.0.0.1:3000", "http://localhost:4200"));
+		corsConfiguration.setAllowCredentials(true);
+
+		UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+		urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+		return urlBasedCorsConfigurationSource;
+	}
 }
